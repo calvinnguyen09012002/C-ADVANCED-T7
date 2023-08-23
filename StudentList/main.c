@@ -178,7 +178,7 @@ void test(words test){
     }
 }
 
-bool counter(words test1, words test2){
+bool compare(words test1, words test2){
     //if(test1.length != test2.length) return false;
 
     for (int i = 0; i < test1.length; i++)
@@ -283,9 +283,9 @@ int main(int argc, char const *argv[])
 
     int pos = 0;
     int NumberoftheSameName = 1;
-    while(pos<=12)
+    while(pos<=n)
     {
-        if(counter(ptr[pos],ptr[pos+1])) 
+        if(compare(ptr[pos],ptr[pos+1])) 
         {
             pos++;
             NumberoftheSameName++;
