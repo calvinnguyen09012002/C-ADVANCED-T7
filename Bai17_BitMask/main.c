@@ -2,7 +2,7 @@
 *File: main.c
 *Author: Nguyen Gia Phuc
 *Date: 29/08/2023
-*Description: Practice Bit Mask
+*Description: Practice Bit Maskg
 */
 #include <stdio.h>
 #include <stdint.h>

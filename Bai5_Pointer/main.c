@@ -1,3 +1,9 @@
+/*
+*File: main.c
+*Author: Nguyen Gia Phuc
+*Date: 22/07/2023
+*Description: Revision of Pointer
+*/
 #include <stdio.h>
 void tong(int a, int b){
     printf("Tong 2 so a va b: %d\n",a+b );
