@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+
 int Tong(int so_tham_so,...){
     va_list var;
     int bien_tong = 0;
