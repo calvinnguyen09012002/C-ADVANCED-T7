@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+
 typedef struct{
     uint8_t *array;
     uint8_t size;
