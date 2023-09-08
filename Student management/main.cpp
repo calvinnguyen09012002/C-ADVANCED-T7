@@ -25,7 +25,7 @@ using namespace std;
 
 typedef enum{
     ADD = 1,
-    DELETE =2,
+    DELETE =3,
     PRINT = 7,
     EXIT = 8
 }Demand;
