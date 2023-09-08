@@ -25,6 +25,7 @@ using namespace std;
 
 typedef enum{
     ADD = 1,
+    DELETE =2,
     PRINT = 7,
     EXIT = 8
 }Demand;
@@ -137,6 +138,7 @@ double Student::Get_Chemistry_scores(){
 
 //--------------FUNCTION----------------------
 void Add_student(vector<Student>& database_Student);
+void Delete_student(vector<Student>& database_Student);
 void Print_Infor(vector<Student> database_Student);
 
 //---------------MAIN FUNTION--------------
@@ -164,6 +166,9 @@ turn:   cout <<"My choice: ";
         switch(key){
         case ADD:
             Add_student(database_Student);
+            break;
+        case DELETE:
+            Delete_student(database_Student);
             break;
         case PRINT:
             Print_Infor(database_Student);
@@ -245,7 +250,40 @@ void Add_student(vector<Student>& database_Student){
         goto enter_again;
         break;
     }
+}
 
+void Delete_student(vector<Student>& database_Student){
+    continue_deleting:
+    cout<<"------------DELETE STUDENT---------------"<<endl;
+    cout<<"Hien nay co "<<database_Student.size()<<" sinh vien"<<endl;
+    if(!database_Student.size()) return;
+    int ID_temp;
+    do
+    {
+        cout <<"Nhap ID muon xoa (0-"<<database_Student.size()-1<<")"<<endl;
+        cin >> ID_temp;
+    } while ((ID_temp < 0)||(ID_temp > database_Student.size()-1));
+
+    database_Student.erase(database_Student.begin()+ID_temp);
+
+    int out;
+    enter_again:
+    cout <<"------CONTINUE OR END----------"<<endl;
+    cout <<"Nhan phim 1 de tiep tuc xoa sinh vien"<<endl;
+    cout <<"Nhan phim 0 de thoat: "<<endl;
+    cout <<"My choice: ";
+    cin >>out;
+    switch (out)
+    {
+    case 0:
+        break;
+    case 1:
+        goto continue_deleting;
+        break;
+    default:
+        goto enter_again;
+        break;
+    }
 }
 
 void Print_Infor(vector<Student> database_Student){
