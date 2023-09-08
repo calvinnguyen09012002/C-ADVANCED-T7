@@ -10,6 +10,8 @@
     5: Sắp xếp sinh viên theo điểm trung bình
     6: Sắp xếp sinh viên theo tên
     7: Hiển thị thông tin sinh viên
+
+    8: Thoát ra
 */
 
 
@@ -23,7 +25,8 @@ using namespace std;
 
 typedef enum{
     ADD = 1,
-    PRINT = 7
+    PRINT = 7,
+    EXIT = 8
 }Demand;
 
 typedef enum{
@@ -144,6 +147,7 @@ int main(int argc, char const *argv[])
 
     while (1)
     {
+        system("clear");
         cout<<"------------STUDENT MANAGEMENT---------------"<<endl;
         //Thong bao ban dau
         cout <<"1: Them sinh vien"<<endl;
@@ -153,9 +157,9 @@ int main(int argc, char const *argv[])
         cout <<"5: Sap xep sinh vien theo diem trung binh "<<endl;
         cout <<"6: Sap xep sinh vien theo ten "<<endl;
         cout <<"7: Hien thi thong tin sinh vien "<<endl;
-
+        cout <<"8: Thoat chuong trinh "<<endl;
         //Nhap yeu cau
-        cout <<"My choice: ";
+turn:   cout <<"My choice: ";
         cin >> key;
         switch(key){
         case ADD:
@@ -164,21 +168,26 @@ int main(int argc, char const *argv[])
         case PRINT:
             Print_Infor(database_Student);
             break;
+        case EXIT:
+            goto exit;
+            break;
         default:
-
+            cout <<"Vui long nhap lai!!"<<endl;
+            goto turn;
             break;
         }
     }
-
+    exit:
     return 0;
 }
 
 void Add_student(vector<Student>& database_Student){
+    continue_adding:
     cout<<"------------ADD STUDENT---------------"<<endl;
     int ID_temp;
     string NAME_temp;
     int OLD_temp;
-    int GENDER_temp;
+    int GENDER_temp = 1;
     double MATH_SCORES_temp; 
     double PHYSICS_SCORES_temp; 
     double CHEMISTRY_SCORES_temp;
@@ -186,16 +195,27 @@ void Add_student(vector<Student>& database_Student){
     cin.ignore();
     cout <<"Nhap ten sinh vien: "; 
     getline(cin,NAME_temp);
-    cout <<"Nhap ten tuoi: ";
-    cin >> OLD_temp;
-    cout <<"Nhap ten gioi tinh(1.NAM   2.NU): ";
-    cin >> GENDER_temp;
-    cout <<"Nhap ten diem toan: ";
-    cin >> MATH_SCORES_temp;
-    cout <<"Nhap ten diem ly: ";
-    cin >> PHYSICS_SCORES_temp;
-    cout <<"Nhap ten diem hoa: ";
-    cin >> CHEMISTRY_SCORES_temp;
+    cout <<"Nhap ten tuoi: "; cin >> OLD_temp;
+    do
+    {
+        cout <<"Nhap ten gioi tinh(1.NAM   2.NU): ";
+        cin >> GENDER_temp;
+    } while ((GENDER_temp != 1)&&(GENDER_temp != 2));
+    do
+    {
+        cout <<"Nhap ten diem toan (0-10): ";
+        cin >> MATH_SCORES_temp;
+    } while ((MATH_SCORES_temp < 0)||(MATH_SCORES_temp  > 10));
+    do
+    {
+        cout <<"Nhap ten diem ly (0-10): ";
+        cin >> PHYSICS_SCORES_temp;
+    } while ((PHYSICS_SCORES_temp < 0)||(PHYSICS_SCORES_temp  > 10));
+    do
+    {
+        cout <<"Nhap ten diem hoa (0-10): ";
+        cin >> CHEMISTRY_SCORES_temp;
+    } while ((CHEMISTRY_SCORES_temp < 0)||(CHEMISTRY_SCORES_temp  > 10));
     
     if (GENDER_temp == 1) 
     {
@@ -206,6 +226,26 @@ void Add_student(vector<Student>& database_Student){
         Student student_temp= {NAME_temp, OLD_temp, Female, MATH_SCORES_temp, PHYSICS_SCORES_temp, CHEMISTRY_SCORES_temp};
         database_Student.push_back(student_temp);
     }
+
+    int out;
+    enter_again:
+    cout <<"------CONTINUE OR END----------"<<endl;
+    cout <<"Nhan phim 1 de tiep tuc them sinh vien"<<endl;
+    cout <<"Nhan phim 0 de thoat: "<<endl;
+    cout <<"My choice: ";
+    cin >>out;
+    switch (out)
+    {
+    case 0:
+        break;
+    case 1:
+        goto continue_adding;
+        break;
+    default:
+        goto enter_again;
+        break;
+    }
+
 }
 
 void Print_Infor(vector<Student> database_Student){
@@ -221,7 +261,7 @@ void Print_Infor(vector<Student> database_Student){
         else if(database_Student[i].Get_Gender() == 2) cout<<"\tNU";
         printf("\t\t%.2f\t%.2f\t%.2f\n", database_Student[i].Get_Math_scores(), database_Student[i].Get_Physics_scores(), database_Student[i].Get_Chemistry_scores());
     }
-    int out = 0;
+    int out = 1;
     do
     {
         cout <<"Nhan phim 0 de thoat: ";
