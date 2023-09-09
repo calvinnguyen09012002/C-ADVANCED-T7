@@ -24,6 +24,7 @@ using namespace std;
 
 typedef enum{
     ADD = 1,
+    UPDATE = 2,
     DELETE = 3,
     SEARCH_ID = 4,
     ARRANGE_SCORES = 5,
@@ -157,6 +158,7 @@ Type_of_Ability Student::Get_Ability(){
 
 //--------------FUNCTION----------------------
 void Add_student(vector<Student>& database_Student);
+void Update_student(vector<Student>& database_Student);
 void Delete_student(vector<Student>& database_Student);
 void Arrange_scores(vector<Student>& database_Student);
 void Arrange_name(vector<Student>& database_Student);
@@ -188,6 +190,9 @@ turn:   cout <<"My choice: ";
         switch(key){
         case ADD:
             Add_student(database_Student);
+            break;
+        case UPDATE:
+            Update_student(database_Student);
             break;
         case DELETE:
             Delete_student(database_Student);
@@ -277,6 +282,106 @@ void Add_student(vector<Student>& database_Student){
         break;
     case 1:
         goto continue_adding;
+        break;
+    default:
+        goto enter_again;
+        break;
+    }
+}
+
+void Update_student(vector<Student>& database_Student){
+    continue_updating:
+    cout<<"------------UPDATE INFORMATION OF STUDENT---------------"<<endl;
+    cout<<"Hien nay co "<<database_Student.size()<<" sinh vien, gom co cac ID sau:"<<endl;
+
+    for(int i=0; i < database_Student.size(); i++){
+            cout << database_Student[i].Get_ID()<<", ";     
+    }
+    cout << endl;
+
+
+    if(!database_Student.size()) return;
+    int ID_temp;
+    do
+    {
+        cout <<"Nhap ID muon cap nhat: ";
+        cin >> ID_temp;
+    } while ((ID_temp < 0)||(ID_temp > database_Student.size()-1));
+
+    int found = 0;
+    for(int i=0; i < database_Student.size(); i++) {
+        if (database_Student[i].Get_ID() == ID_temp) {
+            found = 1;
+            cout << "\n------------Cap nhat sinh vien co ID---------------" <<endl;
+
+            int ID_temp;
+            string NAME_temp;
+            int OLD_temp;
+            Type_of_Gender GENDER_temp; int temp;
+            double MATH_SCORES_temp; 
+            double PHYSICS_SCORES_temp; 
+            double CHEMISTRY_SCORES_temp;
+
+            cin.ignore(); cout <<"Nhap ten sinh vien: "; getline(cin,NAME_temp);
+            database_Student[i].Set_Name(NAME_temp);
+
+            cout <<"Nhap ten tuoi: "; cin >> OLD_temp;
+            do
+            {
+                cout <<"Nhap ten gioi tinh(1.NAM   2.NU): ";
+                cin >> temp;
+            } while ((temp != 1)&&(temp != 2));
+            database_Student[i].Set_Old(OLD_temp);
+
+            if (temp == 1) 
+            {
+                GENDER_temp = Male; 
+            }else if (temp == 2)
+            {
+                GENDER_temp = Female;
+            }
+            database_Student[i].Set_Gender(GENDER_temp);
+
+            do
+            {
+                cout <<"Nhap ten diem toan (0-10): ";
+                cin >> MATH_SCORES_temp;
+            } while ((MATH_SCORES_temp < 0)||(MATH_SCORES_temp  > 10));
+            database_Student[i].Set_Math_scores(MATH_SCORES_temp);
+
+            do
+            {
+                cout <<"Nhap ten diem ly (0-10): ";
+                cin >> PHYSICS_SCORES_temp;
+            } while ((PHYSICS_SCORES_temp < 0)||(PHYSICS_SCORES_temp  > 10));
+            database_Student[i].Set_Physics_scores(PHYSICS_SCORES_temp);
+
+            do
+            {
+                cout <<"Nhap ten diem hoa (0-10): ";
+                cin >> CHEMISTRY_SCORES_temp;
+            } while ((CHEMISTRY_SCORES_temp < 0)||(CHEMISTRY_SCORES_temp  > 10));
+            database_Student[i].Set_Chemistry_scores(CHEMISTRY_SCORES_temp);
+            break;
+        }
+    }
+    if (found == 0) {
+        printf("\n Sinh vien co ID = %d khong ton tai.", ID_temp);
+    }
+
+    int out;
+    enter_again:
+    cout <<"------CONTINUE OR END----------"<<endl;
+    cout <<"Nhan phim 1 de tiep tuc them sinh vien"<<endl;
+    cout <<"Nhan phim 0 de thoat: "<<endl;
+    cout <<"My choice: ";
+    cin >>out;
+    switch (out)
+    {
+    case 0:
+        break;
+    case 1:
+        goto continue_updating;
         break;
     default:
         goto enter_again;
