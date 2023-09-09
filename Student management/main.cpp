@@ -18,22 +18,24 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include<stdio.h>
 #include <string.h>
 
 using namespace std;
 
 typedef enum{
     ADD = 1,
-    DELETE =3,
+    DELETE = 3,
+    SEARCH_ID = 4,
+    ARRANGE_SCORES = 5,
+    ARRANGE_NAME = 6,
     PRINT = 7,
     EXIT = 8
 }Demand;
 
 typedef enum{
-    Excellent,
-    Good,
-    Weak
+    Excellent = 1,
+    Good = 2,
+    Weak = 3
 } Type_of_Ability;
 
 typedef enum{
@@ -49,7 +51,8 @@ class Student{
         Type_of_Gender GENDER;
         double MATH_SCORES; 
         double PHYSICS_SCORES; 
-        double CHEMISTRY_SCORES;  
+        double CHEMISTRY_SCORES;
+        Type_of_Ability ABILITY;  
     public:
         Student(string name, int old, Type_of_Gender gender,double math_scores, double physic_scores, double chemistry_scores);
 
@@ -136,9 +139,28 @@ double Student::Get_Chemistry_scores(){
     return CHEMISTRY_SCORES;
 }
 
+double Student::Get_Average_scores(){
+    return (MATH_SCORES+PHYSICS_SCORES+CHEMISTRY_SCORES)/3;
+}
+
+Type_of_Ability Student::Get_Ability(){
+    if ((MATH_SCORES+PHYSICS_SCORES+CHEMISTRY_SCORES)/3 >= 9)
+    {
+        return Excellent;
+    }else if ((MATH_SCORES+PHYSICS_SCORES+CHEMISTRY_SCORES)/3 < 5)
+    {
+        return Weak;
+    }else{
+        return Good;
+    } 
+}
+
 //--------------FUNCTION----------------------
 void Add_student(vector<Student>& database_Student);
 void Delete_student(vector<Student>& database_Student);
+void Arrange_scores(vector<Student>& database_Student);
+void Arrange_name(vector<Student>& database_Student);
+void Search_student(vector<Student> database_Student);
 void Print_Infor(vector<Student> database_Student);
 
 //---------------MAIN FUNTION--------------
@@ -170,6 +192,15 @@ turn:   cout <<"My choice: ";
         case DELETE:
             Delete_student(database_Student);
             break;
+        case SEARCH_ID:
+            Search_student(database_Student);
+            break;
+        case ARRANGE_SCORES:
+            Arrange_scores(database_Student);
+            break;
+        case ARRANGE_NAME:
+            Arrange_name(database_Student);
+            break;
         case PRINT:
             Print_Infor(database_Student);
             break;
@@ -192,7 +223,7 @@ void Add_student(vector<Student>& database_Student){
     int ID_temp;
     string NAME_temp;
     int OLD_temp;
-    int GENDER_temp = 1;
+    Type_of_Gender GENDER_temp; int temp;
     double MATH_SCORES_temp; 
     double PHYSICS_SCORES_temp; 
     double CHEMISTRY_SCORES_temp;
@@ -204,8 +235,15 @@ void Add_student(vector<Student>& database_Student){
     do
     {
         cout <<"Nhap ten gioi tinh(1.NAM   2.NU): ";
-        cin >> GENDER_temp;
-    } while ((GENDER_temp != 1)&&(GENDER_temp != 2));
+        cin >> temp;
+    } while ((temp != 1)&&(temp != 2));
+    if (temp == 1) 
+    {
+        GENDER_temp = Male; 
+    }else if (temp == 2)
+    {
+        GENDER_temp = Female;
+    }
     do
     {
         cout <<"Nhap ten diem toan (0-10): ";
@@ -222,15 +260,9 @@ void Add_student(vector<Student>& database_Student){
         cin >> CHEMISTRY_SCORES_temp;
     } while ((CHEMISTRY_SCORES_temp < 0)||(CHEMISTRY_SCORES_temp  > 10));
     
-    if (GENDER_temp == 1) 
-    {
-        Student student_temp= {NAME_temp, OLD_temp, Male, MATH_SCORES_temp, PHYSICS_SCORES_temp, CHEMISTRY_SCORES_temp};
-        database_Student.push_back(student_temp);
-    }else if (GENDER_temp == 2)
-    {
-        Student student_temp= {NAME_temp, OLD_temp, Female, MATH_SCORES_temp, PHYSICS_SCORES_temp, CHEMISTRY_SCORES_temp};
-        database_Student.push_back(student_temp);
-    }
+
+    Student student_temp= {NAME_temp, OLD_temp, GENDER_temp, MATH_SCORES_temp, PHYSICS_SCORES_temp, CHEMISTRY_SCORES_temp};
+    database_Student.push_back(student_temp);
 
     int out;
     enter_again:
@@ -286,23 +318,151 @@ void Delete_student(vector<Student>& database_Student){
     }
 }
 
+void Search_student(vector<Student> database_Student){
+    continue_searching:
+    cout<<"------------SEARCH STUDENT---------------"<<endl;
+    cout<<"Hien nay co "<<database_Student.size()<<" sinh vien"<<endl;
+    if(!database_Student.size()) return;
+    int ID_temp;
+    do
+    {
+        cout <<"Nhap ID muon tim kiem (0-"<<database_Student.size()-1<<"): ";
+        cin >> ID_temp;
+    } while ((ID_temp < 0)||(ID_temp > database_Student.size()-1));
+
+    for(int i=0; i < database_Student.size(); i++){
+        if (i == ID_temp)
+        {
+            cout <<"\nSTT\tID\tHo va ten\tTuoi\tGioi tinh\tToan\tLy\tHoa\tDiem TB\tXep loai";
+            cout<<"\n " << i + 1;
+            cout<<"\t"<< database_Student[i].Get_ID();
+            cout<<"\t"<<database_Student[i].Get_Name();
+            cout<<"\t\t"<<database_Student[i].Get_Old();
+            if (database_Student[i].Get_Gender() == Male) cout<<"\tNAM";
+            else if(database_Student[i].Get_Gender() == Female) cout<<"\tNU";
+            printf("\t\t%.2f\t%.2f\t%.2f\t%.2f", database_Student[i].Get_Math_scores(), database_Student[i].Get_Physics_scores(), database_Student[i].Get_Chemistry_scores(),database_Student[i].Get_Average_scores());
+            if (database_Student[i].Get_Ability() == Excellent) cout<<"\tXUAT SAC";
+            else if(database_Student[i].Get_Ability() == Good) cout<<"\tTOT";
+            else if(database_Student[i].Get_Ability() == Weak) cout<<"\tYEU";
+        }
+    }
+
+    int out;
+    enter_again:
+    cout <<"------CONTINUE OR END----------"<<endl;
+    cout <<"Nhan phim 1 de tiep tuc tim kiem sinh vien"<<endl;
+    cout <<"Nhan phim 0 de thoat: "<<endl;
+    cout <<"My choice: ";
+    cin >>out;
+    switch (out)
+    {
+    case 0:
+        break;
+    case 1:
+        goto continue_searching;
+        break;
+    default:
+        goto enter_again;
+        break;
+    }
+}
+
+void Arrange_scores(vector<Student>& database_Student){
+    cout<<"------------ARRANGE STUDENT BY SCORES---------------"<<endl;
+
+    int choice ;
+    do
+    {
+        cout <<"\nNhan phim 1 de sap xep tang dan";
+        cout <<"\nNhan phim 2 de sap xep giam dan";
+        cout <<"\nMy choice: ";
+        cin >>choice;
+    } while ((choice!=1)&&(choice!=2));
+
+    if (choice == 1)
+    {
+        Student TEMP_database_Student = {"TAM", 0, Male, 0, 0, 0};
+        int temp;
+        for(int i=0; i < database_Student.size(); i++){
+            for(int j = i+1; j < database_Student.size();j++){
+                if(database_Student[i].Get_Average_scores() < database_Student[j].Get_Average_scores()){
+                    TEMP_database_Student = database_Student[i];
+                    database_Student[i] = database_Student[j];
+                    database_Student[j] = TEMP_database_Student;
+                }
+            }
+        }
+    }else if (choice == 2)
+    {
+        Student TEMP_database_Student = {"TAM", 0, Male, 0, 0, 0};
+        int temp;
+        for(int i=0; i < database_Student.size(); i++){
+            for(int j = i+1; j < database_Student.size();j++){
+                if(database_Student[i].Get_Average_scores() > database_Student[j].Get_Average_scores()){
+                    TEMP_database_Student = database_Student[i];
+                    database_Student[i] = database_Student[j];
+                    database_Student[j] = TEMP_database_Student;
+                }
+            }
+        }
+    }
+    
+    int out = 1;
+    do
+    {
+        cout <<"\nNhan phim 0 de thoat: ";
+        cin >>out;
+    } while (out);
+}
+
+void Arrange_name(vector<Student>& database_Student){
+    cout<<"------------ARRANGE STUDENT BY SCORES---------------"<<endl;
+
+    Student TEMP_database_Student = {"TAM", 0, Male, 0, 0, 0};
+    char TEMP_name_student1[10];
+    char TEMP_name_student2[10];
+
+    for(int i=0; i < database_Student.size(); i++) {
+        database_Student[i].Get_Name().copy(TEMP_name_student1,1);
+    
+        for(int j = i+1; j < database_Student.size(); j++) {
+            database_Student[j].Get_Name().copy(TEMP_name_student2,1);
+            
+            if(TEMP_name_student1[0] > TEMP_name_student2[0]) {
+                TEMP_database_Student = database_Student[i];
+                database_Student[i] = database_Student[j];
+                database_Student[j] = TEMP_database_Student;
+            }
+        }
+    }
+    int out = 1;
+    do
+    {
+        cout <<"\nNhan phim 0 de thoat: ";
+        cin >>out;
+    } while (out);
+}
+
 void Print_Infor(vector<Student> database_Student){
     cout<<"------------STUDENT LIST---------------"<<endl;
-    cout <<"\nSTT\tID\tHo va ten\tTuoi\tGioi tinh\tToan\tLy\tHoa";
+    cout <<"\nSTT\tID\tHo va ten\tTuoi\tGioi tinh\tToan\tLy\tHoa\tDiem TB\tXep loai";
     
     for(int i=0; i < database_Student.size(); i++){
         cout<<"\n " << i + 1;
         cout<<"\t"<< database_Student[i].Get_ID();
         cout<<"\t"<<database_Student[i].Get_Name();
         cout<<"\t\t"<<database_Student[i].Get_Old();
-        if (database_Student[i].Get_Gender() == 1) cout<<"\tNAM";
-        else if(database_Student[i].Get_Gender() == 2) cout<<"\tNU";
-        printf("\t\t%.2f\t%.2f\t%.2f\n", database_Student[i].Get_Math_scores(), database_Student[i].Get_Physics_scores(), database_Student[i].Get_Chemistry_scores());
+        if (database_Student[i].Get_Gender() == Male) cout<<"\tNAM";
+        else if(database_Student[i].Get_Gender() == Female) cout<<"\tNU";
+        printf("\t\t%.2f\t%.2f\t%.2f\t%.2f", database_Student[i].Get_Math_scores(), database_Student[i].Get_Physics_scores(), database_Student[i].Get_Chemistry_scores(),database_Student[i].Get_Average_scores());
+        if (database_Student[i].Get_Ability() == Excellent) cout<<"\tXUAT SAC";
+        else if(database_Student[i].Get_Ability() == Good) cout<<"\tTOT";
+        else if(database_Student[i].Get_Ability() == Weak) cout<<"\tYEU";
     }
     int out = 1;
     do
     {
-        cout <<"Nhan phim 0 de thoat: ";
+        cout <<"\nNhan phim 0 de thoat: ";
         cin >>out;
     } while (out);
 }
