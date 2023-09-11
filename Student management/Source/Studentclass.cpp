@@ -1,5 +1,5 @@
 /*
-*File: main.cpp
+*File: Studentclass.cpp
 *Author: Nguyen Gia Phuc
 *Date: 08/09/2023
 *Description: 
