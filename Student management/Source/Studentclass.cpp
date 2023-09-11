@@ -421,11 +421,25 @@ void Arrange_scores(vector<Student>& database_Student){
                 database_Student[minIndex] = database_Student[i];
                 database_Student[i] = temp;
             }
-            cout << "Sap Xep theo diem TB thanh cong." << endl;
+            cout << "Sap Xep theo diem TB tang dan thanh cong." << endl;
             cout << endl;
         }
         else if (choice == 2){
-        
+            int i, j, maxIndex;
+            for (i = 0; i < database_Student.size() - 1; i++)
+            {
+                maxIndex = i;
+                for (j = i + 1; j < database_Student.size(); j++)
+                {
+                    if (database_Student[j].Get_Average_scores() > database_Student[maxIndex].Get_Average_scores())
+                        maxIndex = j;
+                }
+                Student temp = database_Student[maxIndex];
+                database_Student[maxIndex] = database_Student[i];
+                database_Student[i] = temp;
+            }
+            cout << "Sap Xep theo diem TB giam dan thanh cong." << endl;
+            cout << endl;
         }
     }
 	
