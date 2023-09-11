@@ -14,7 +14,7 @@
     8: Thoát ra
 */
 
-#include "Studentclass.h"
+#include "Studentclass.cpp"
 
 int main(int argc, char const *argv[])
 {
