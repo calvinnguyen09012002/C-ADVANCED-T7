@@ -1,14 +1,13 @@
 /*
  * File Name: main.cpp
  * Author: Nguyen Gia Phuc
- * Date: 11/09/2023
+ * Date: 10/09/2023
  * Description: Manage a restaurant's system
  */
 
 #include <iostream>
 #include <string>
 #include <vector>
-
 
 using namespace std;
 
@@ -1019,6 +1018,7 @@ int main(int argc, char const *argv[])
 	Manager manager;
 	Staff staff;
 	while (1){
+		TURN:
 		Display_Main_Menu();
 		int key;
 		cin >> key;
@@ -1036,6 +1036,8 @@ int main(int argc, char const *argv[])
 			staff.Display_Menu_Staff();
 			break;
 		default:
+			cout << "Please try again!!" << endl;
+			goto TURN;
 			break;
 		}
 	}
